@@ -375,11 +375,11 @@ static NSMutableDictionary * SPSearchStoreTextAnalysisOptions() {
 	SKDocumentRef document = SKDocumentCreateWithURL((CFURLRef)inFileURL);
 	if ( document == NULL ) goto bail; // not always harmful!
 	CFStringRef mimeType = (CFStringRef)@"text/plain";
-	success = SKIndexAddDocument(searchIndex, document, mimeType, true);
+	//success = SKIndexAddDocument(searchIndex, document, mimeType, true);
     
     //narayani - start
-    //NSString *myFileViaURL = [[NSString alloc]initWithContentsOfURL:inFileURL encoding:NSUTF8StringEncoding error:nil];
-    //success = SKIndexAddDocumentWithText(searchIndex, document, (CFStringRef)myFileViaURL, true);
+    NSString *myFileViaURL = [[NSString alloc]initWithContentsOfURL:inFileURL encoding:NSUTF8StringEncoding error:nil];
+    success = SKIndexAddDocumentWithText(searchIndex, document, (CFStringRef)myFileViaURL, true);
     //narayani - end
 	if ( success ) [self _incrementChangeCount];
 	
