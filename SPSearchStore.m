@@ -366,13 +366,15 @@ static NSMutableDictionary * SPSearchStoreTextAnalysisOptions() {
 }
 
 - (BOOL) _addDocument:(NSURL*)inFileURL typeHint:(NSString*)inMimeHint {
-	
+    
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	[writeLock lock];
 	
 	BOOL success = NO;
 	
-	SKDocumentRef document = SKDocumentCreateWithURL((CFURLRef)inFileURL);
+    SKDocumentRef document = NULL;
+    @try {
+    document = SKDocumentCreateWithURL((CFURLRef)inFileURL);
 	if ( document == NULL ) goto bail; // not always harmful!
 	CFStringRef mimeType = (CFStringRef)@"text/plain";
 	//success = SKIndexAddDocument(searchIndex, document, mimeType, true);
@@ -387,6 +389,10 @@ static NSMutableDictionary * SPSearchStoreTextAnalysisOptions() {
 	 CFStringRef name = SKDocumentGetName(document);
 	 NSLog(@"name is %@", (NSString*)name);
 	//
+    }
+    @catch(NSException * e) {
+        NSLog(@"Exception: %@", e);
+    }
 	
 bail:
 	if ( document ) CFRelease(document);

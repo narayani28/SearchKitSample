@@ -174,15 +174,30 @@
 	[op beginWithCompletionHandler:^(NSInteger result) {
 		
 		if ( result == NSFileHandlingPanelOKButton ) {
-			
+			//narayani - old code starts
 			NSArray *selection = [op URLs];
-			[selection enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            //narayani - old code ends
+            
+            //narayani - new code
+            NSURL *myUrl = [op URL];
+            NSString *absStr = [myUrl absoluteString];
+            NSString *workFile = myUrl.path;
+            BOOL isDir = NO;
+            NSArray *subpaths;
+            
+            NSFileManager *fileManager = [[NSFileManager alloc] init];
+            if ([fileManager fileExistsAtPath:workFile isDirectory:&isDir] && isDir)
+                subpaths = [fileManager subpathsAtPath:workFile];
+            //narayani - new code
+			[subpaths enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 				
+                NSString* fullPath = [absStr stringByAppendingString:(NSString*)obj];
+                NSURL *url = [NSURL URLWithString:fullPath];
 				// add the document to the store
-				[searchStore addDocument:(NSURL*)obj typeHint:nil];							// <- call to store
+				[searchStore addDocument:(NSURL*)url typeHint:nil];							// <- call to store
 				
 				// add the document to our model
-				[documents addObject:(NSURL*)obj];
+				[documents addObject:(NSURL*)url];
 			}];
 		}
 		
