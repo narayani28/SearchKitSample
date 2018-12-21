@@ -192,7 +192,11 @@
 			[subpaths enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 				
                 NSString* fullPath = [absStr stringByAppendingString:(NSString*)obj];
-                NSURL *url = [NSURL URLWithString:fullPath];
+                //fix for path with spaces in filename
+                NSString* urlTextEscaped = [fullPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                NSURL *url = [NSURL URLWithString: urlTextEscaped];
+                //todo - filter out directory
+               
 				// add the document to the store
 				[searchStore addDocument:(NSURL*)url typeHint:nil];							// <- call to store
 				
@@ -278,16 +282,16 @@
 	
 	
 	NSArray *terms = [searchStore allTerms];
-	NSLog(@"%@", terms);
+	//NSLog(@"%@", terms);
 	
 	NSString *term = [terms objectAtIndex:0];
 	NSArray *docs = [searchStore documentsForTerm:term];
-	NSLog(@"%@ occurs in %@", term, docs);
+	//NSLog(@"%@ occurs in %@", term, docs);
 	
 	NSURL *docURI = [docs objectAtIndex:0];
 	NSArray *docTerms = [searchStore termsForDocument:docURI];
 	
-	NSLog(@"%@ has the terms %@", docURI, docTerms);
+	//NSLog(@"%@ has the terms %@", docURI, docTerms);
 	
 	NSArray * results = nil;
 	NSArray * normalizedRanks = nil;
@@ -298,10 +302,10 @@
 	
 	normalizedRanks = [searchStore normalizedRankingsArray:ranks];
 	
-	NSLog(@"%@ returns %@ with ranks %@", term, results, normalizedRanks);
+	//NSLog(@"%@ returns %@ with ranks %@", term, results, normalizedRanks);
 	
 	NSArray *allDocs = [searchStore allDocuments];
-	NSLog(@"all documents: %@", allDocs);
+	//NSLog(@"all documents: %@", allDocs);
 	
 }
 

@@ -76,6 +76,9 @@
 	
 	SKSearchRef currentSearch;
 	NSUInteger changeCount;
+    
+    //profiling
+    NSDate* startTime;
 }
 
 @property (readonly) SKIndexRef searchIndex;

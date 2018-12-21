@@ -387,7 +387,7 @@ static NSMutableDictionary * SPSearchStoreTextAnalysisOptions() {
 	
 	//
 	 CFStringRef name = SKDocumentGetName(document);
-	 NSLog(@"name is %@", (NSString*)name);
+	 //NSLog(@"name is %@", (NSString*)name);
 	//
     }
     @catch(NSException * e) {
@@ -413,7 +413,7 @@ bail:
 	
 	success = SKIndexAddDocumentWithText(searchIndex, document, (CFStringRef)inContents, true);
     CFStringRef name = SKDocumentGetName(document);
-    NSLog(@"name is %@", (NSString*)name);
+   // NSLog(@"name is %@", (NSString*)name);
 	if ( success ) [self _incrementChangeCount];
 	
 bail:
@@ -756,6 +756,7 @@ bail:
 	[self _flushIndexIfNecessary];
 	[readLock lock];
 	
+    startTime = [NSDate date];
 	currentSearch = SKSearchCreate(searchIndex, (CFStringRef)searchQuery, searchOptions);
 	if ( currentSearch == NULL ) NSLog(@"there was a problem creating the search query");
 	
@@ -847,6 +848,9 @@ bail:
 		SKSearchCancel(currentSearch);
 		CFRelease(currentSearch);
 		currentSearch = NULL;
+        NSDate* endTime = [NSDate date];
+        NSTimeInterval secondsBetween = [endTime timeIntervalSinceDate:startTime];
+        NSLog(@"Fetchresults:: starttime is %@, end time is %@, seconds elapsed is %f\n", startTime, endTime, secondsBetween);
 	}
 	
 	return stillSearching;
@@ -953,6 +957,10 @@ bail:
 		SKSearchCancel(currentSearch);
 		CFRelease(currentSearch);
 		currentSearch = NULL;
+        NSDate* endTime = [NSDate date];
+        NSTimeInterval secondsBetween = [endTime timeIntervalSinceDate:startTime];
+        NSLog(@"Cancel:: starttime is %@, end time is %@, seconds elapsed is %f\n", startTime, endTime, secondsBetween);
+
 	}
 	
 	[readLock unlock];
