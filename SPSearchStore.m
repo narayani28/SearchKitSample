@@ -1,4 +1,4 @@
-//
+    //
 //  SPSearchStore.m
 //  SPSearchStore
 //
@@ -380,7 +380,17 @@ static NSMutableDictionary * SPSearchStoreTextAnalysisOptions() {
 	//success = SKIndexAddDocument(searchIndex, document, mimeType, true);
     
     //narayani - start
-    NSString *myFileViaURL = [[NSString alloc]initWithContentsOfURL:inFileURL encoding:NSUTF8StringEncoding error:nil];
+    NSStringEncoding encoding = 0;
+    NSString *myFileViaURL = [[NSString alloc]initWithContentsOfURL:inFileURL usedEncoding:&encoding error:nil];
+       
+        
+        NSFileHandle* aHandle = [NSFileHandle fileHandleForReadingFromURL:inFileURL error:nil];
+        NSData* fileContents = nil;
+        
+        if (aHandle)
+            fileContents = [aHandle readDataToEndOfFile];
+        
+        
     success = SKIndexAddDocumentWithText(searchIndex, document, (CFStringRef)myFileViaURL, true);
     //narayani - end
 	if ( success ) [self _incrementChangeCount];

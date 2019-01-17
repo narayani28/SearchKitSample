@@ -68,17 +68,17 @@
 	
 	/* Initialize the store */
 	
-	[self initializeStoreWithData:nil];
+	//[self initializeStoreWithData:nil];
 	
 	// Comment out the above line and uncomment the following lines to test with a 
 	// file-based store. The openDocument and saveDocument methods will not work. 
 	// You should also uncomment the saveChangesToStore call in the 
 	// applicationWillTerminate method beloew.
 	
-	// NSString *path = [@"~/spsearchstore.index" stringByExpandingTildeInPath];
-	// NSURL *url = [NSURL fileURLWithPath:path];
+	 NSString *path = [@"~/spsearchstore.index" stringByExpandingTildeInPath];
+	 NSURL *url = [NSURL fileURLWithPath:path];
 	
-	// [self initializeStoreWithURL:url];
+	 [self initializeStoreWithURL:url];
 }
 
 - (void) applicationWillTerminate:(NSNotification *)aNotification {
@@ -89,7 +89,7 @@
 	// We would uncomment the following line if we also wanted to guarantee that 
 	// changes to the store have been written to the memory or disk backing.
 	
-	// [searchStore saveChangesToStore];													// <- call to store
+	 [searchStore saveChangesToStore];													// <- call to store
 	
 	[searchStore closeStore];																//
 }
@@ -119,7 +119,7 @@
 	if ( searchStore == nil ) NSLog(@"There was a problem creating the search store");
 	
 	searchStore.usesSpotlightImporters = NO;
-	searchStore.usesConcurrentIndexing = YES;
+	searchStore.usesConcurrentIndexing = NO;
 	searchStore.ignoresNumericTerms = NO;
 	
 	/* Store initialization is complete at this point */
@@ -142,7 +142,7 @@
 	if ( searchStore == nil ) NSLog(@"There was a problem creating the search store");
 	
 	searchStore.usesSpotlightImporters = NO;
-	searchStore.usesConcurrentIndexing = YES;
+	searchStore.usesConcurrentIndexing = NO;
 	searchStore.ignoresNumericTerms = NO;
 	
 	if ( searchStore.didCreateStore == NO ) { 
@@ -172,9 +172,9 @@
 	[op setCanChooseFiles:YES];
 	
 	[op beginWithCompletionHandler:^(NSInteger result) {
-		
+		NSDate* startTime = [NSDate date];
 		if ( result == NSFileHandlingPanelOKButton ) {
-			//narayani - old code starts
+            //narayani - old code starts
 			NSArray *selection = [op URLs];
             //narayani - old code ends
             
@@ -204,7 +204,9 @@
 				[documents addObject:(NSURL*)url];
 			}];
 		}
-		
+        NSDate* endTime = [NSDate date];
+        NSTimeInterval secondsBetween = [endTime timeIntervalSinceDate:startTime];
+        NSLog(@"Fetchresults:: Indexstarttime is %@, Indexend time is %@, Indexing seconds elapsed is %f\n", startTime, endTime, secondsBetween);
 		[self reloadDocumentsTableWithAllDocuments];
 		
 	}];
@@ -280,7 +282,7 @@
 	// Don't care for the rest of the interface? Just uncomment the lines below and
 	// see what happens when you load documents into the store.
 	
-	
+	/*
 	NSArray *terms = [searchStore allTerms];
 	//NSLog(@"%@", terms);
 	
@@ -304,8 +306,9 @@
 	
 	//NSLog(@"%@ returns %@ with ranks %@", term, results, normalizedRanks);
 	
-	NSArray *allDocs = [searchStore allDocuments];
-	//NSLog(@"all documents: %@", allDocs);
+    NSArray *allDocs = [searchStore allDocuments:FALSE];
+	NSLog(@"all documents: %@", allDocs);
+     */
 	
 }
 
