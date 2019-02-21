@@ -132,11 +132,11 @@
 //	[SPSearchStore setDefaultTextAnalysisOption:[SPSearchStore stopWordsForLanguage:@"en"]
 //			forKey:(NSString *)kSKStopWords];
 			
-	[SPSearchStore setDefaultTextAnalysisOption:[NSNumber numberWithBool:YES] 
-			forKey:(NSString *)kSKProximityIndexing];
+	//[SPSearchStore setDefaultTextAnalysisOption:[NSNumber numberWithBool:YES]
+		//	forKey:(NSString *)kSKProximityIndexing];
 			
-	[SPSearchStore setDefaultTextAnalysisOption:[NSNumber numberWithInteger:2] 
-			forKey:(NSString *)kSKMinTermLength];
+	//[SPSearchStore setDefaultTextAnalysisOption:[NSNumber numberWithInteger:2]
+			//forKey:(NSString *)kSKMinTermLength];
 	
 	searchStore = [[SPSearchStore alloc] initStoreWithURL:inFileURL type:kSKIndexInvertedVector];
 	if ( searchStore == nil ) NSLog(@"There was a problem creating the search store");

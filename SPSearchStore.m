@@ -342,6 +342,7 @@ static NSMutableDictionary * SPSearchStoreTextAnalysisOptions() {
 		return YES;
 	}
 	else {
+        
 		return [self _addDocument:inDocumentURI withText:inContents];
 	}
 }
@@ -382,21 +383,27 @@ static NSMutableDictionary * SPSearchStoreTextAnalysisOptions() {
     //narayani - start
     NSStringEncoding encoding = 0;
     NSString *myFileViaURL = [[NSString alloc]initWithContentsOfURL:inFileURL usedEncoding:&encoding error:nil];
-       
+    
+       /* NSString* newcontents = @" <title> あいうえお </title>        <style type=\"text/css\">       </style>        </head>         <body>        <p>this file has GB18030 Encoding .</p>         </body>         </html>; ";
+        char* somestring = "<title> あいうえお </title>        <style type=\"text/css\">       </style>        </head>         <body>        <p>this file has GB18030 Encoding .</p>         </body>         </html>;";
+        NSString *newcontents =
+        [[NSString alloc] initWithCString:somestring
+                                 encoding:NSUTF16StringEncoding];
+         //NSString *hello = @"わずかに青緑色を呈す透明の液体";//あいうえ ぁぃうよる this file";
+        NSString *hello = [[NSString alloc]initWithUTF8String:"国際交流基金は、1972年に外務省所管の特殊法人として設立され、2003年10月1日に独立行政法人となりました。日本の友人をふやし、世界との絆をはぐくむため、「文化」と「言語」と「対話」を通じて日本と世界をつなぐ場をつくり、人々の間に共感や信頼、好意を育んでいきます。"];
+        //NSString* hello = @"国際交流基金 -";
+        NSLog(@"String:%@",hello);*/
         
-        NSFileHandle* aHandle = [NSFileHandle fileHandleForReadingFromURL:inFileURL error:nil];
-        NSData* fileContents = nil;
         
-        if (aHandle)
-            fileContents = [aHandle readDataToEndOfFile];
-        
+        // https://www.jpf.go.jp/j/about/index.html - UTF-8 CHARSET page. below snippet is from that page
+        //NSString *myFileViaURL1 = [[NSString alloc]initWithUTF8String:"日本の友人をふやし、世界との絆をはぐくむため、「文化」と「言語」と「対話」を通じて日本と世界をつなぐ場をつくり、人々の間に共感や信頼、好意を育んでいきます。"]; // failure at の絆をはぐく
         
     success = SKIndexAddDocumentWithText(searchIndex, document, (CFStringRef)myFileViaURL, true);
     //narayani - end
 	if ( success ) [self _incrementChangeCount];
 	
 	//
-	 CFStringRef name = SKDocumentGetName(document);
+	// CFStringRef name = SKDocumentGetName(document);
 	 //NSLog(@"name is %@", (NSString*)name);
 	//
     }
