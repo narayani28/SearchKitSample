@@ -381,8 +381,13 @@ static NSMutableDictionary * SPSearchStoreTextAnalysisOptions() {
 	//success = SKIndexAddDocument(searchIndex, document, mimeType, true);
     
     //narayani - start
+       // NSString *myFileViaURL = [[NSString alloc]initWithContentsOfURL:inFileURL encoding:NSUTF8StringEncoding error:nil];
+        
+        //the following 2 lines of code where text with multiple encodings are there, it fails
     NSStringEncoding encoding = 0;
     NSString *myFileViaURL = [[NSString alloc]initWithContentsOfURL:inFileURL usedEncoding:&encoding error:nil];
+        
+        //failure testcases
     
        /* NSString* newcontents = @" <title> あいうえお </title>        <style type=\"text/css\">       </style>        </head>         <body>        <p>this file has GB18030 Encoding .</p>         </body>         </html>; ";
         char* somestring = "<title> あいうえお </title>        <style type=\"text/css\">       </style>        </head>         <body>        <p>this file has GB18030 Encoding .</p>         </body>         </html>;";
